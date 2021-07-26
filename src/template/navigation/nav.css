@@ -1,0 +1,23 @@
+.nav {
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0;
+  padding-left: 20px;
+  background-color: rgb(31, 30, 30);
+  margin-top: 100px;
+}
+
+.nav > .menu {
+  padding: 5px 15px;
+  border: 1px solid grey;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.nav > .menu:last-child {
+  margin-right: 0;
+}
+
