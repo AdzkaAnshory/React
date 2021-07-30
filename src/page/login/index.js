@@ -29,14 +29,13 @@ class Login extends Component {
     const userLogin  = this.props.userLogin
     for(let i = 0;i < usernew.length;i++){
       if(this.state.inputUsername === usernew[i].username && this.state.inputPassword === usernew[i].password){
+        const userJabatan = usernew.filter((item) => item.username === this.state.inputUsername).map(({name, username, jabatan}) => ({name, username, jabatan}));
         setStatusPage("home")
-        userLogin(this.state.inputUsername)
+        userLogin(this.state.inputUsername, userJabatan[0].jabatan)
         return alert("Login Username " +this.state.inputUsername+ " Berhasil")
-      }
-        
-      return alert("Username atau Password tidak terdaftar")
-      
-    } 
+      }      
+    }
+    return alert("Username atau Password tidak terdaftar")
   }
 
   render() { 

@@ -2,23 +2,33 @@ import React, { Component } from 'react';
 import '../../css/style.css'
 import { RowInput } from '../../component';
 
-class Register extends Component {
+class FormGaji extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userID: "",
             inputNIK: "",
             inputName: "",
-            inputRegUsername: "",
-            inputRegPassword: "",
+            inputUsername: "",
+            inputPassword: "",
             inputJabatan: "",
-            userlist:[]
+            inputGaji: "",
+            inputTunjangan: ""
      }
   }
 
     componentDidMount = () => {
-        const usernew = this.props.usersArr
+        const userss = this.props.userDetail
+        console.log("id", userss.iduser)
         this.setState({
-            userlist:usernew
+            userID : userss.iduser,
+            inputNIK : userss.nik,
+            inputName : userss.name,
+            inputUsername : userss.username,
+            inputPassword : userss.password,
+            inputJabatan : userss.jabatan,
+            inputGaji : userss.gaji,
+            inputTunjangan : userss.tunjangan
         })
     }
     setValue = el => {
@@ -27,26 +37,24 @@ class Register extends Component {
         })
     }
   
-    registerUser = () => {
-        const setStatusPage  = this.props.setPage
-        const registUser = this.props.registerUser
+    saveUser = () => {
+        const setStatusPage = this.props.setPage
+        const saveEditUser = this.props.saveEditUser
         const S = this.state
-        for(let i = 0; i < this.state.userlist.length; i++){
-          if(S.inputRegUsername !== this.state.userlist[i].username){
-          registUser(S.inputNIK,S.inputName,S.inputRegUsername,S.inputRegPassword,S.inputJabatan)
+          saveEditUser(S.userID, S.inputNIK,S.inputName,S.inputUsername,S.inputPassword,S.inputJabatan,S.inputGaji,S.inputTunjangan)
           this.setState({
+            userID: "",
             inputNIK: "",
             inputName: "",
-            inputRegUsername: "",
-            inputRegPassword: "",
+            inputUsername: "",
+            inputPassword: "",
             inputJabatan: "",
+            inputGaji: "",
+            inputTunjangan: ""
           })
-          setStatusPage("login")
-          return alert("Berhasil Registrasi, Silahkan Login")
-          }
-        return alert("Registrasi Gagal, Username "+S.inputRegUsername+" Telah Terdaftar")
-        }
-      }
+          setStatusPage("home")
+          return alert("Berhasil Edit Data User "+this.state.inputName)
+    }
 
     render() { 
     const setStatusPage  = this.props.setPage
@@ -57,39 +65,38 @@ class Register extends Component {
                     <div className="signin-form profile">
                         <h3>Register</h3>
                         <RowInput
-                                placeholder="NIK"
                                 nameInput="inputNIK"
                                 onChangeEvent={this.setValue}
                                 valueInput={this.state.inputNIK}
                         />
                         <RowInput
-                                placeholder="Full Name"
                                 nameInput="inputName"
                                 onChangeEvent={this.setValue}
                                 valueInput={this.state.inputName}
                         />
                         <RowInput
-                                placeholder="Jabatan"
                                 nameInput="inputJabatan"
                                 valueInput={this.state.inputJabatan}
                                 onChangeEvent={this.setValue}
                         />
                         <RowInput
-                                placeholder="Username"
-                                nameInput="inputRegUsername"
+                                nameInput="inputUsername"
                                 onChangeEvent={this.setValue}
-                                valueInput={this.state.inputRegUsername}
+                                valueInput={this.state.inputUsername}
                         />
-                        <RowInput
-                                placeholder="Password"
-                                nameInput="inputRegPassword"
-                                typeInput="password"
-                                valueInput={this.state.inputRegPassword}
+                         <RowInput
+                                nameInput="inputGaji"
                                 onChangeEvent={this.setValue}
+                                valueInput={this.state.inputGaji}
+                        />
+                         <RowInput
+                                nameInput="inputTunjangan"
+                                onChangeEvent={this.setValue}
+                                valueInput={this.state.inputTunjangan}
                         />
                         <div className="tp">
-                            <button className="btnnn" onClick={ this.registerUser} >Register</button>
-							<button className="btnnn" onClick={()=>setStatusPage("login")}>Login</button>
+                            <button className="btnnn" onClick={ this.saveUser} >Save</button>
+							<button className="btnnn" onClick={()=>setStatusPage("home")}>Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -99,4 +106,4 @@ class Register extends Component {
     }
 }
  
-export default Register;
+export default FormGaji;

@@ -7,6 +7,7 @@ class About extends Component {
 		super(props);
 		this.state = {
 			userLogin: "",
+			userJabatan: "",
 			inputName: "",
 			inputAddress: "",
 			inputUsername: "",
@@ -16,54 +17,51 @@ class About extends Component {
 	}
 
 	componentDidMount = () => {
-		this.setState({
+		if(this.props.userJabatan === "Manager"){
+			const userfil = this.props.usersArr.filter((item) => item.jabatan !== "HRD").map(({nik, name, username, password, jabatan, gaji, tunjangan})=>({nik, name, username, password, jabatan, gaji, tunjangan}))
+			console.log("123123",userfil);
+			return this.setState({
+				userList: userfil,
+				userLogin: this.props.userLog,
+				userJabatan: this.props.userJabatan
+			})
+		}
+		return this.setState({
 			userList: this.props.usersArr,
-			userLogin: this.props.userLog
+			userLogin: this.props.userLog,
+			userJabatan: this.props.userJabatan
 		})
-		console.log("asda", this.state.userLogin)
 	}
 
 	renderList = () =>{
 		return this.state.userList.map((users, index) => {
-			if(users.status && users.status === "edit")
-				return (<tr key={index}>
-					<td>{index + 1}</td>
-					<td>
-					<input
-						name="inputName"
-						type="text" value={this.state.inputName} onChange={this.onChangeHandler} />
-					</td>
-					<td>
-					<input
-						name="inputUsername"
-						type="text" value={this.state.inputUsername} onChange={this.onChangeHandler} />
-					</td>
-					<td>
-					<input
-						name="inputPassword"
-						type="text" value={this.state.inputPassword} onChange={this.onChangeHandler} />
-					</td>
-					<td>
-					<input
-						name="inputAddress"
-						type="text" value={this.state.inputAddress} onChange={this.onChangeHandler} />
-					</td>
-					
-					<td>
-					<button className="btn-save-edit" type="submit" onClick={() => this.onSaveEdit(index)}>Save</button>
-					<button className="btn-cancel" onClick={() => this.onCancel(index)}>Cancel</button>
-					</td>
-				</tr>)	
+			if(this.state.userJabatan === "HRD"){	
 			return (
 				<tr key={index}>
 					<td>{index + 1}</td>
+					<td>{users.nik}</td>
 					<td>{users.name}</td>
 					<td>{users.username}</td>
 					<td>{users.password}</td>
-					<td>{users.address}</td>
+					<td>{users.jabatan}</td>
+					<td>{users.gaji+users.tunjangan}</td>
 					<td>
-						<button className="btn-save-edit" onClick={() => this.editHandler(index)}>Edit</button>
-						<button className="btn-delete" onClick={() => this.deleteHandler(index)}>Delete</button>
+						<button className="btn-save-edit" onClick={() => this.detailHandler(index)}>Detail</button>
+						<button className="btn-delete" onClick={() => this.editHandler(index)}>Edit</button>
+					</td>
+				</tr>
+			)}
+			return (
+				<tr key={index}>
+					<td>{index + 1}</td>
+					<td>{users.nik}</td>
+					<td>{users.name}</td>
+					<td>{users.username}</td>
+					<td>{users.password}</td>
+					<td>{users.jabatan}</td>
+					<td>{users.gaji+users.tunjangan}</td>
+					<td>
+						<button className="btn-save-edit" onClick={() => this.detailHandler(index)}>Detail</button>
 					</td>
 				</tr>
 			)
@@ -78,34 +76,39 @@ class About extends Component {
 		})
 		console.log(this.inputUsername)
 	  }
-
-	editHandler = id => {
-		const checkFilter = this.state.userList.filter(users => users.status)
-		const checkuser = this.state.userList[id].username;
-		if(checkuser !== this.state.userLogin) return alert("Tidak bisa mengedite user lain")
-		
-		if(checkFilter.length > 0)
-		return alert("Save terlebih dahulu!!")
-  
+	
+	detailHandler = id => {
+		const setDetailUser = this.props.setDetailUser
 		const user = this.state.userList[id]
 		const newData = {
+			nik : user.nik,
 			name : user.name,
-			username: user.username,
-			password: user.password,
-			address: user.address,
-			status: "edit"
+			username : user.username,
+			password : user.password,
+			jabatan : user.jabatan,
+			gaji : user.gaji,
+			tunjangan : user.tunjangan 
 		}
-	
-		let userUpdate = this.state.userList
-		userUpdate.splice(id, 1, newData)
-	
-		this.setState({
-			userList: userUpdate,
-			inputName: user.name,
-			inputUsername: user.username,
-			inputPassword: user.password,
-			inputAddress: user.address
-		})
+		setDetailUser(newData)
+		this.setPage("detail")
+	}  
+
+	editHandler = id => {  
+		const setDetailUser = this.props.setDetailUser
+		const user = this.state.userList[id]
+		const newData = {
+			iduser : id,
+			nik : user.nik,
+			name : user.name,
+			username : user.username,
+			password : user.password,
+			jabatan : user.jabatan,
+			gaji : user.gaji,
+			tunjangan : user.tunjangan 
+		}
+		setDetailUser(newData)
+		this.setPage("formgaji")
+
 	}
 
 	deleteHandler = index => {
@@ -159,10 +162,12 @@ class About extends Component {
 					<thead>
 						<tr>
 							<th>No</th>
+							<th>NIK</th>
 							<th>Name</th>
 							<th>Username</th>
 							<th>Password</th>
-							<th>Address</th>
+							<th>Jabatan</th>
+							<th>Gaji Total</th>
 							<th>Action</th>
 						</tr>
 					</thead>
