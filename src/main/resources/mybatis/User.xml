@@ -1,0 +1,81 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+    <resultMap id = "result" type = "com.restAPI.DataBaseKreta.database.model.User">
+        <result property = "id" column = "id"/>
+        <result property = "nama" column = "nama"/>
+        <result property = "username" column = "username"/>
+        <result property = "password" column = "password"/>
+        <result property = "jabatan" column = "jabatan"/>
+        <result property = "status" column = "status"/>
+    </resultMap>
+    <!--Memasukan data ke tabel user-->
+    <insert id = "insertUser" parameterType = "com.restAPI.DataBaseKreta.database.model.User">
+        INSERT INTO admin (nama, username, password, jabatan, status) VALUES (#{nama}, #{username}, #{password}, #{jabatan}, #{status});
+    </insert>
+
+    <select id = "getAll" resultMap = "result">
+        SELECT * FROM admin;
+    </select>
+
+    <select id = "getById" parameterType = "int" resultMap = "result">
+        SELECT * FROM admin WHERE id = #{id};
+    </select>
+
+    <select id = "getEmail" parameterType = "com.restAPI.DataBaseKreta.database.model.User" resultType="String">
+        SELECT username FROM admin WHERE password = #{password};
+    </select>
+    <select id = "getPassword" parameterType = "com.restAPI.DataBaseKreta.database.model.User" resultType="String">
+        SELECT password FROM admin WHERE username = #{username};
+    </select>
+    <select id = "getStatus" parameterType = "com.restAPI.DataBaseKreta.database.model.User" resultType="String">
+        SELECT status FROM admin WHERE username = #{username};
+    </select>
+
+    <update id = "updateStatus" parameterType = "com.restAPI.DataBaseKreta.database.model.User">
+        UPDATE admin SET status = #{status} WHERE username = #{username};
+    </update>
+
+    <update id = "updateUser" parameterType = "com.restAPI.DataBaseKreta.database.model.User">
+        UPDATE user SET fullname = #{fullname}, email = #{email}, password = #{password}, phone = #{phone} WHERE id_user = #{id_user};
+    </update>
+
+    <!--Menghapus record berdasarkan id    -->
+    <delete id = "deleteUserById" parameterType = "long">
+        DELETE FROM admin WHERE id = #{id};
+    </delete>
+
+    <update id = "updateUserById" parameterType = "com.restAPI.DataBaseKreta.database.model.User">
+        UPDATE admin SET nama = #{nama}, username = #{username}, password = #{password}, jabatan = #{jabatan} WHERE id = #{id};
+    </update>
+
+    <!--&lt;!&ndash;Menampilkan semua record siswa    &ndash;&gt;-->
+    <!--    <select id = "showAllSiswa" resultType = "Hashmap">-->
+    <!--        SELECT siswa.id_siswa, siswa.nama, siswa.address, siswa.status, nilai.fisika, nilai.kalkulus, nilai.biologi FROM siswa INNER JOIN nilai ON siswa.id_siswa = nilai.id_siswa;-->
+    <!--    </select>-->
+
+    <!--&lt;!&ndash;Menampilkan record siswa berdasarkan id&ndash;&gt;-->
+    <!--    <select id = "showSiswaById" parameterType = "int" resultType = "Hashmap">-->
+    <!--        SELECT siswa.id_siswa, siswa.nama, siswa.address, siswa.status, nilai.fisika, nilai.kalkulus, nilai.biologi FROM siswa INNER JOIN nilai ON siswa.id_siswa = nilai.id_siswa AND siswa.id_siswa = #{id};-->
+    <!--    </select>-->
+
+    <!--Mencari id_siswa dengan kondisi nama dan alamat-->
+    <!--    <select id="getUsername" parameterType = "com.siswarabbitmq.database.model.Siswa" resultType="String">-->
+    <!--        SELECT id_siswa FROM siswa WHERE nama = #{nama} AND address = #{address};-->
+    <!--    </select>-->
+
+
+
+    <!--    <resultMap id = "result" type = "main.java.Student">-->
+    <!--        <result property = "id" column = "ID"/>-->
+    <!--        <result property = "name" column = "NAME"/>-->
+    <!--        <result property = "branch" column = "BRANCH"/>-->
+    <!--        <result property = "percentage" column = "PERCENTAGE"/>-->
+    <!--        <result property = "phone" column = "PHONE"/>-->
+    <!--        <result property = "email" column = "EMAIL"/>-->
+    <!--    </resultMap>-->
+
+
+</mapper>

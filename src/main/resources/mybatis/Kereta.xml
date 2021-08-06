@@ -1,0 +1,67 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Kereta">
+    <resultMap id = "result" type = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        <result property = "id" column = "id"/>
+        <result property = "nama" column = "nama"/>
+        <result property = "kelas" column = "kelas"/>
+        <result property = "id_jadwal" column = "id_jadwal"/>
+        <result property = "id_kereta" column = "id_kereta"/>
+        <result property = "tgl_pergi" column = "tgl_pergi"/>
+        <result property = "jam_pergi" column = "jam_pergi"/>
+        <result property = "jam_sampai" column = "jam_sampai"/>
+        <result property = "lama_perjalanan" column = "lama_perjalana"/>
+        <result property = "asal" column = "asal"/>
+        <result property = "tujuan" column = "tujuan"/>
+        <result property = "harga" column = "harga"/>
+        <result property = "id_kursi" column = "id_kursi"/>
+        <result property = "id_jadwal" column = "id_jadwal"/>
+        <result property = "no_kursi" column = "no_kursi"/>
+        <result property = "status" column = "status"/>
+    </resultMap>
+
+    <insert id = "insertKereta" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        INSERT INTO kereta (nama, kelas) VALUES (#{nama}, #{kelas});
+    </insert>
+    <insert id = "insertJadwal" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        INSERT INTO jadwal (id_kereta, tgl_pergi, jam_pergi, jam_sampai, lama_perjalanan, asal, tujuan, harga) VALUES (#{id_kereta}, #{tgl_pergi}, #{jam_pergi}, #{jam_sampai}, #{lama_perjalanan}, #{asal}, #{tujuan}, #{harga});
+    </insert>
+    <insert id = "insertKursi" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        INSERT INTO kursi (id_jadwal, no_kursi, status_kursi) VALUES (#{id_jadwal}, #{no_kursi}, #{status_kursi});
+    </insert>
+
+    <update id = "updateKereta" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        UPDATE kereta SET nama = #{nama}, kelas = #{kelas} WHERE id = #{id};
+    </update>
+
+    <update id = "updateJadwal" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        UPDATE jadwal SET id_kereta = #{id_kereta}, tgl_pergi = #{tgl_pergi}, jam_pergi #{jam_pergi}, jam_sampai #{jam_sampai}, lama_perjalanan = #{lama_perjalanan}, asal = #{asal}, tujuan = #{tujuan}, harga = #{harga} WHERE id = #{id};
+    </update>
+
+    <update id = "updateKursi" parameterType = "com.restAPI.DataBaseKreta.database.model.Kereta">
+        UPDATE kursi SET id_jadwal = #{id_jadwal}, no_kursi = #{no_kursi}, status_kursi = #{status_kursi} WHERE id = #{id};
+    </update>
+
+    <select id="selectAll" resultMap="result">
+        SELECT kereta.nama, kereta.kelas, jadwal.tgl_pergi, jadwal.jam_pergi, jadwal.jam_sampai, jadwal.lama_perjalanan, jadwal.asal, jadwal.tujuan, jadwal.harga, kursi.no_kursi, kursi.status_kursi FROM kereta JOIN jadwal ON kereta.id=jadwal.id_kereta JOIN kursi ON jadwal.id_jadwal=kursi.id_jadwal
+    </select>
+    <!--Asal-->
+    <select id="selectAsal" resultMap="result">
+        SELECT kereta.nama, kereta.kelas, jadwal.tgl_pergi, jadwal.jam_pergi, jadwal.jam_sampai, jadwal.lama_perjalanan, jadwal.asal, jadwal.tujuan, jadwal.harga, kursi.no_kursi, kursi.status_kursi FROM kereta JOIN jadwal ON kereta.id=jadwal.id_kereta JOIN kursi ON jadwal.id_jadwal=kursi.id_jadwal WHERE jadwal.asal= #{asal} AND jadwal.tujuan= #{tujuan} AND kursi.status_kursi LIKE #{status_kursi}
+    </select>
+
+    <select id="selectAsal2" resultMap="result">
+        SELECT kereta.nama, kereta.kelas, jadwal.tgl_pergi, jadwal.jam_pergi, jadwal.jam_sampai, jadwal.lama_perjalanan, jadwal.asal, jadwal.tujuan, jadwal.harga, kursi.no_kursi, kursi.status_kursi FROM kereta JOIN jadwal ON kereta.id=jadwal.id_kereta JOIN kursi ON jadwal.id_jadwal=kursi.id_jadwal WHERE jadwal.asal= #{asal} AND jadwal.tujuan= #{tujuan}
+    </select>
+
+    <select id="selectKursi" resultMap="result">
+        SELECT no_kursi, status kursi FROM kursi WHERE status_kursi LIKE 'Kosong'
+    </select>
+
+<!--    <delete id="deleteKereta">-->
+<!--        DELETE FROM kereta WHERE id = #{id}-->
+<!--    </delete>-->
+
+</mapper>
