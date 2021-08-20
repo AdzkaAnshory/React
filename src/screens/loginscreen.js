@@ -24,14 +24,16 @@ class LoginScreen extends Component {
 
     onPressLogin = () => {
         const user = this.state.userlist
-        const { email, screen } = this.state
+        const { email, password, screen } = this.state
+        if(email !== "" && password !== ""){
         for(let i = 0; i < user.length; i++){
             if(user[i].email === this.state.email && user[i].password === this.state.password){
                 this.props.setScreen({ screen })
-                return alert("Selamat Datang " + email + "")
+                return Alert.alert("Selamat Datang ","" + email + "")
             }
         }
-        return alert("user not found")
+        return Alert.alert("Warning!!","User not found")
+        }else return Alert.alert("Warning!!","Tidak boleh kosong")
     }
 
     onButtonPressed = () => {}
@@ -60,13 +62,17 @@ class LoginScreen extends Component {
             underlineColorAndroid="transparent"
           />
         </View>
-        <Button
-            title="Log in" type="outline"
-            containerStyle={styles.loginContainer}
-            style={styles.loginText}
-            onPress={() => this.onPressLogin()}
-            >
-        </Button>
+        <View style={styles.loginContainer}>
+            <Text
+                title="Log in" type="outline"
+                containerStyle={styles.loginContainer}
+                style={styles.loginText}
+                onPress={() => this.onPressLogin()}
+                >
+            Log In
+            </Text>
+        </View>
+        
       </View>
      );
     }
@@ -109,7 +115,8 @@ const styles = StyleSheet.create({
       marginTop: 30
     },
     loginText: {
-      color: AppStyles.color.white
+      color: AppStyles.color.white,
+      textAlign: 'center'
     },
     placeholder: {
       color: "red"
