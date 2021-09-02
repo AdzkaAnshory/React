@@ -16,6 +16,8 @@ target 'ListProject' do
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'ListProjectTests' do
     inherit! :complete
     # Pods for testing

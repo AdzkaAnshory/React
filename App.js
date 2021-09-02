@@ -1,54 +1,51 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
-import HomeScreen from './src/screens/HomeScreen/Homescreen';
-import LoginScreen from './src/screens/loginscreen';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Detail from './src/screens/HomeScreen/detail';
+import { AppRegistry } from 'react-native';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation'
+import BooksScreen from './src/components/BooksScreen';
+import BookDetailScreen from './src/components/BookDetailScreen';
+import AddBookScreen from './src/components/AddBookScreen';
+import EditBookScreen from './src/components/EditBookScreen';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloProvider } from 'react-apollo';
 
+const MainNavigator = createStackNavigator({
+ Book: { screen: BooksScreen },
+ BookDetails: { screen: BookDetailScreen },
+ AddBook: { screen: AddBookScreen },
+ EditBook: { screen: EditBookScreen },
+});
+
+const MyRootComponent = createAppContainer(MainNavigator);
+const cache = new InMemoryCache();
+const client = new ApolloClient({
+ cache,
+ link: new HttpLink({
+    uri: 'http://localhost:3000/graphql',
+ }),
+});
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      screen : "home",
-      selected: []
-     }
+    this.state = {  }
   }
-
-  setScreen = obj => {
-    this.setState({
-      screen: obj.screen
-    })
-  }
-
-  setDetail = obj => {
-    this.setState({
-      screen: obj.screen
-    })
-  }
-
-  selectedList = obj =>{
-    this,this.setState({
-      selected : obj.result
-    })
-  }
-
-  renderedScreen = () => {
-    if(this.state.screen === "login")
-      return <LoginScreen setScreen={this.setScreen}/>
-    if(this.state.screen === "detail")
-      return <Detail selected={this.state.selected} setHome={this.setDetail}/>
-    if(this.state.screen === "home")  
-      return <HomeScreen selectedList={this.selectedList} setDetail={this.setDetail} setScreen={this.setScreen}/>
-  }
-
   render() { 
-    return ( 
-      <SafeAreaProvider>
-        {this.renderedScreen()}
-    </SafeAreaProvider>
-      );
+    return (  
+      <ApolloProvider client={client}>
+        <MyRootComponent />
+      </ApolloProvider>
+    );
   }
 }
  
 export default App;
+// const App = () => (
+//  <ApolloProvider client={client}>
+//   <MyRootComponent />
+//  </ApolloProvider>
+// );
+
+// AppRegistry.registerComponent('MyApp', () => App);
